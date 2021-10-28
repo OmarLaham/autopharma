@@ -90,7 +90,7 @@ function get_dose($pid, $pcode, $must_order) {
 			$result = exec_query($query);
 			
 			//order if must
-			if($must_order) {
+			if($must_order == "yes") {
 				$query = "INSERT INTO orders (patient_id) VALUES ($pid)";
 				$result = exec_query($query);
 

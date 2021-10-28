@@ -1,3 +1,37 @@
+<?php
+
+//Note: this page is not create to be secure . only for prototyping.
+function exec_query($query) {
+
+	$host = "localhost";
+	$username = "id17824824_ranim_5th_year_admin";
+	$password = "LjXDC_+5{[=<1GfF";
+	$dbname = "id17824824_ranim_5th_year";
+
+	$mysqli = new mysqli($host, $username, $password, $dbname);
+
+	// Check connection
+	if ($mysqli -> connect_errno) {
+		return false;
+	}
+
+	// Perform query
+	if ($result = $mysqli -> query($query)) {
+
+		$mysqli -> close();
+		return $result;
+
+	}
+
+}
+//get orders list
+$query = "SELECT p.pid AS pid, p.first_name AS first_name, p.last_name AS last_name, o.timestamp AS order_timestamp, o.status AS order_status FROM patients p INNER JOIN orders o ON (p.pid = o.patient_id) ORDER BY o.timestamp DESC";
+$orders = exec_query($query);
+		
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +43,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title><title>MedOrganizer - Orders</title></title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -34,11 +68,11 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">MedOrganizer</div>
             </a>
 
             
@@ -50,18 +84,20 @@
                 Monitoring
             </div>
 
+
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="charts.html">
+                <a class="nav-link" href="orders.php">	
                     <i class="fas fa-fw fa-table"></i>
-                    <span>Patients</span></a>
+                    <span>Orders</span></a>
             </li>
-
+            
+            
             <!-- Nav Item - Charts -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="patients.php">
                     <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Orders</span></a>
+                    <span>Patients</span></a>
             </li>
 
             
@@ -309,7 +345,7 @@
                                             <th>Patient ID</th>
                                             <th>Patient - First N.</th>
                                             <th>Patient - Last N.</th>
-                                            <th>Date Received</th>
+                                            <th>Order Date</th>
                                             <th>Status</th>
                                             <th>Operations</th>
                                         </tr>
@@ -319,37 +355,31 @@
                                             <th>Patient ID</th>
                                             <th>Patient - First N.</th>
                                             <th>Patient - Last N.</th>
-                                            <th>Date</th>
+                                            <th>Order Date</th>
                                             <th>Status</th>
                                             <th>Operations</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                    	  <tr>
-                                            <td>1</td>
-                                            <td>Sami</td>
-                                            <td>Al Sabbagh</td>
-                                            <td>15/07/2022</td>
-                                            <td><span class="text-warning">(Pending..)</span></td>
-                                            <td><a href="#">Details</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Rami</td>
-                                            <td>Agha</td>
-                                            <td>10/07/2022</td>
-                                            <td><span class="text-warning">(Pending..)</span></td>
-                                            <td><a href="#">Details</a></td>
-                                        </tr>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>Rami</td>
-                                            <td>Agha</td>
-                                            <td>10/06/2022</td>
-                                            <td><span class="text-success">Processed</span></td>
-                                            <td><a href="#">Details</a></td>
-                                        </tr>
-                                        
+					<?php
+					while($order = $orders->fetch_object()) {
+						$pid = $record->pid;
+						$p_first_name = $record->first_name;
+						$p_last_name = $record->last_name;
+						$order_date = $record->order_timestamp;
+						$status = $record->order_status;
+						$status = ($status == "processed") ? "<span class=\"text-success\">Processed</span>" : "<span class=\"text-warning\">(Pending..)</span>";
+
+						print("<tr>");
+						print("$pid");
+						print("$p_first_name");
+						print("$p_last_name");
+						print("$order_date");
+						print("$status");
+						print("<a href=\"#\">Details</a>");
+						print("</tr>");
+					}                
+					?>                        
                                     </tbody>
                                 </table>
                             </div>

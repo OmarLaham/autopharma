@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>MedOrganizer - Homepage</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -35,7 +35,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">MedOrganizer</div>
             </a>
 
             
@@ -426,12 +426,7 @@
                                         <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
                                             aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
                                     </div>
-                                    <h4 class="small font-weight-bold">Account Setup <span
-                                            class="float-right">Complete!</span></h4>
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+                                    
                                 </div>
                             </div>
 
@@ -449,28 +444,14 @@
                                         <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
                                             src="img/undraw_posting_photo.svg" alt="...">
                                     </div>
-                                    <p>Add some quality, svg illustrations to your project courtesy of <a
-                                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                        constantly updated collection of beautiful svg images that you can use
-                                        completely free and without attribution!</p>
-                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                        unDraw &rarr;</a>
+                                    <p>Provide patients with their medication on time and help them step over the obstacles between 
+                                    them and taking their pills reguraliy. We also put a lot of efforts to give the doctors the ability 
+                                    to monitor the prescribed treatment of their patients.</p>
+                                    <a href="#">See more &rarr;</a>
                                 </div>
                             </div>
 
-                            <!-- Approach -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                        CSS bloat and poor page performance. Custom CSS classes are used to create
-                                        custom components and custom utility classes.</p>
-                                    <p class="mb-0">Before working with this theme, you should become familiar with the
-                                        Bootstrap framework, especially the utility classes.</p>
-                                </div>
-                            </div>
+                            
 
                         </div>
                     </div>
