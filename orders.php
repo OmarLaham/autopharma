@@ -12,22 +12,22 @@ function exec_query($query) {
 
 	// Check connection
 	if ($mysqli -> connect_errno) {
+		print("can't connect to mysql");
 		return false;
+		exit();
 	}
 
 	// Perform query
 	if ($result = $mysqli -> query($query)) {
-
+	
 		$mysqli -> close();
 		return $result;
 
+	} else {		
+		return false;
 	}
 
 }
-//get orders list
-$query = "SELECT p.pid AS pid, p.first_name AS first_name, p.last_name AS last_name, o.timestamp AS order_timestamp, o.status AS order_status FROM patients p INNER JOIN orders o ON (p.pid = o.patient_id) ORDER BY o.timestamp DESC";
-$orders = exec_query($query);
-		
 
 ?>
 
@@ -43,7 +43,7 @@ $orders = exec_query($query);
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title><title>MedOrganizer - Orders</title></title>
+    <title>MedOrganizer - Orders</title>
 
     <!-- Custom fonts for this template -->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -362,22 +362,26 @@ $orders = exec_query($query);
                                     </tfoot>
                                     <tbody>
 					<?php
+					
+					//get orders list
+					$query = "SELECT p.id AS pid, p.first_name AS first_name, p.last_name AS last_name, o.timestamp AS order_timestamp, o.status AS order_status FROM `patients` p INNER JOIN `orders` o ON (p.id = o.patient_id) ORDER BY o.timestamp DESC";
+					$orders = exec_query($query);
 					while($order = $orders->fetch_object()) {
-						$pid = $record->pid;
-						$p_first_name = $record->first_name;
-						$p_last_name = $record->last_name;
-						$order_date = $record->order_timestamp;
-						$status = $record->order_status;
-						$status = ($status == "processed") ? "<span class=\"text-success\">Processed</span>" : "<span class=\"text-warning\">(Pending..)</span>";
+						$pid = $order->pid;
+						$p_first_name = $order->first_name;
+						$p_last_name = $order->last_name;
+						$order_date = $order->order_timestamp;
+						$status = $order->order_status;
+						$status = ($status == "Processed") ? "<span class='text-success'>Processed</span>" : "<span class='text-warning'>(Pending..)</span>";
 
-						print("<tr>");
-						print("$pid");
-						print("$p_first_name");
-						print("$p_last_name");
-						print("$order_date");
-						print("$status");
-						print("<a href=\"#\">Details</a>");
-						print("</tr>");
+						echo("<tr>");
+						echo("<td>$pid</td>");
+						echo("<td>$p_first_name</td>");
+						echo("<td>$p_last_name</td>");
+						echo("<td>$order_date</td>");
+						echo("<td>$status</td>");
+						echo("<td><a href='#'>Details</a></td>");
+						echo("</tr>");
 					}                
 					?>                        
                                     </tbody>

@@ -5,7 +5,6 @@
 //turn off error reporting to use only our response-codes
 error_reporting(0);
 
-
 if(isset($_GET["pid"]) && isset($_GET["code"]) && isset($_GET["operation"])) {
 	$pid = $_GET["pid"];
 	$pcode = $_GET["code"];
@@ -15,18 +14,18 @@ if(isset($_GET["pid"]) && isset($_GET["code"]) && isset($_GET["operation"])) {
 		validate_user($pid, $pcode);
 	} elseif ($operation == "get_dose") {
 		if(!isset($_GET["must_order"])) {
-			print("404");
+			print("404\n[must order] is missing in your request");
 			exit();
 		}
 		$must_order = $_GET["must_order"];
 		get_dose($pid, $pcode, $must_order);
 	} else {
-		print("404");
+		print("404\nInvalid operation");
 		exit();
 	}
 	
 } else {
-	print("404");
+	print("404\nInvalid request");
 	exit();
 }
 
@@ -43,7 +42,7 @@ function exec_query($query) {
 	// Check connection
 	if ($mysqli -> connect_errno) {
 		return false;
-		print("404");
+		print("404\nCan't connect to database. Server  error");
 		exit();
 	}
 
@@ -68,7 +67,7 @@ function validate_user($pid, $pcode) {
 	if(mysqli_num_rows($result)) {
 		print("200");
 	} else {
-		print("404");
+		print("404\nInvalid user");
 		exit();
 	}
 }
@@ -107,7 +106,7 @@ function get_dose($pid, $pcode, $must_order) {
 				}
 				
 				if($ordering_error) {
-					print("434");
+					print("434\nWasn't able to order new medicine");
 					exit();
 				} else {
 					print("200");
@@ -133,7 +132,7 @@ function get_dose($pid, $pcode, $must_order) {
 			}
 			
 			if($ordering_error) {
-				print("434");
+				print("434\nWasn't able to order new medicine");
 				exit();
 			} else {
 				print("200");
@@ -141,7 +140,7 @@ function get_dose($pid, $pcode, $must_order) {
 		}	
 		
 	} else {
-		print("404");
+		print("404\nCan't execute databse monitoring query. Server error.");
 		exit();
 	}
 }
