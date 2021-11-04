@@ -5,30 +5,41 @@
 //turn off error reporting to use only our response-codes
 error_reporting(0);
 
+$patients_tubes = array(
+	array("1,3", "1,3,5"),
+	array("2,3", "2,3,6"),
+	array("", "3")
+);
 
-if(isset($_GET["pid"]) && isset($_GET["code"]) && isset($_GET["operation"])) {
-	$pid = $_GET["pid"];
-	$pcode = $_GET["code"];
-	$operation = $_GET["operation"];
-	
-	if($operation == "validate_user") {
-		validate_user($pid, $pcode);
-	} elseif ($operation == "get_dose") {
-		if(!isset($_GET["must_order"])) {
-			print("404");
-			exit();
+
+if(isset($_GET["operation"]) && $_GET["operation"] == "check_time") {
+	print("Time on server now:<br />");
+	print(date("Y-m-d H:i:s"));
+	exit();
+} else {
+	if(isset($_GET["operation"]) && isset($_GET["pid"]) && isset($_GET["code"])) {
+		$pid = $_GET["pid"];
+		$pcode = $_GET["code"];
+		$operation = $_GET["operation"];
+		
+		if($operation == "validate_user") {
+			validate_user($pid, $pcode);
+		} elseif ($operation == "get_dose") {
+			if(!isset($_GET["must_order"])) {
+				print("404");
+				exit();
+			}
+			$must_order = $_GET["must_order"];
+			get_dose($pid, $pcode, $must_order);
 		}
-		$must_order = $_GET["must_order"];
-		get_dose($pid, $pcode, $must_order);
+		
 	} else {
+		
 		print("404");
 		exit();
 	}
-	
-} else {
-	print("404");
-	exit();
 }
+
 
 
 function exec_query($query) {
@@ -82,8 +93,26 @@ function get_dose($pid, $pcode, $must_order) {
 		//if the user has already got at least 1 dose from our system
 		if($record = $result->fetch_object()) {
 			$last_dose_timestamp = $record->timestamp;
-			$now_timestamp = time();
+			$now_timestamp = date("Y-m-d H:i:s");
 			$diff = (int)date('H', $now_timestamp - $last_dose_timestamp);
+			
+			$now_24_hour = (int)date('H');
+			//which medication tubes should be open?
+			$patient_tubes = "";
+			if($now_24_hour >= 6 && $now_24_hour < 18) {
+				$patient_tubes = $patients_tubes[$pid-1][0];
+			} elseif($now_24_hour >= 18 && $now_24_hour <= 23) {
+				$patient_tubes = $patients_tubes[$pid-1][1];
+			} else {
+				print("454");
+				exit();
+			}
+			
+			if($patient_tubes != "") {
+				$patient_tubes = "," . $patient_tubes;
+			}
+			
+			
 			
 			unset($record);
 		
@@ -110,12 +139,12 @@ function get_dose($pid, $pcode, $must_order) {
 					print("434");
 					exit();
 				} else {
-					print("200");
+					print("200" . $patient_tubes);
 				}
 
 				
 			} else {
-				print("444\nThe patient is trying to get another dose in less that 8 hours.");
+				print("444");
 				exit();
 			}
 		} else {//if this is the first time for this user getting a dose from our system (nothing in monitoring from the past)
@@ -136,7 +165,7 @@ function get_dose($pid, $pcode, $must_order) {
 				print("434");
 				exit();
 			} else {
-				print("200");
+				print("200" . $patient_tubes);
 			}
 		}	
 		
