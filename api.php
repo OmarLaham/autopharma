@@ -5,11 +5,7 @@
 //turn off error reporting to use only our response-codes
 error_reporting(0);
 
-$patients_tubes = array(
-	array("1,3", "1,3,5"),
-	array("2,3", "2,3,6"),
-	array("", "3")
-);
+
 
 
 if(isset($_GET["operation"]) && $_GET["operation"] == "check_time") {
@@ -86,6 +82,12 @@ function validate_user($pid, $pcode) {
 
 function get_dose($pid, $pcode, $must_order) {
 
+	$patients_tubes = array(
+		array("1,3", "1,3,5"),
+		array("2,3", "2,3,6"),
+		array("", "4")
+	);
+
 	$query = "SELECT timestamp FROM `monitoring` WHERE patient_id=$pid ORDER BY timestamp DESC LIMIT 1";
 	$result = exec_query($query);
 
@@ -107,9 +109,11 @@ function get_dose($pid, $pcode, $must_order) {
 				print("454");
 				exit();
 			}
-			
 			if($patient_tubes != "") {
 				$patient_tubes = "," . $patient_tubes;
+			} else {
+				print("464");//the patient has no dose now.
+				exit();
 			}
 			
 			
