@@ -26,7 +26,15 @@ if(isset($_GET["operation"]) && $_GET["operation"] == "check_time") {
 				exit();
 			}
 			$must_order = $_GET["must_order"];
-			get_dose($pid, $pcode, $must_order);
+			$ignore_time_difference = false;
+			$multi_pill_per_med=false;
+			if(!isset($_GET["ignore_time_difference"]) && $_GET["ignore_time_difference"] == "yes") {
+				$ignore_time_difference = true;
+			}
+			if(!isset($_GET["multi_pill_per_med"]) && $_GET["multi_pill_per_med"] == "yes") {
+				$multi_pill_per_med = true;
+			}
+			get_dose($pid, $pcode, $must_order, $ignore_time_difference, $multi_pill_per_med);
 		}
 		
 	} else {
@@ -80,13 +88,20 @@ function validate_user($pid, $pcode) {
 	}
 }
 
-function get_dose($pid, $pcode, $must_order) {
+function get_dose($pid, $pcode, $must_order, $ignore_time_difference, $multi_pill_per_med) {
 
 	$patients_tubes = array(
 		array("1,3", "1,3,5"),
 		array("2,3", "2,3,6"),
 		array("", "4")
 	);
+	if($multi_pill_per_med) {
+		$patients_tubes = array(
+			array("1:1,3:2", "1:1,3:2,5:1"),
+			array("2:2,3:1", "2:2,3:1,6:1"),
+			array("", "4:2")
+		);
+	}
 
 	$query = "SELECT timestamp FROM `monitoring` WHERE patient_id=$pid ORDER BY timestamp DESC LIMIT 1";
 	$result = exec_query($query);
@@ -123,7 +138,7 @@ function get_dose($pid, $pcode, $must_order) {
 			$ordering_error = false;
 			
 			//give dose only if at least 8 hours difference form last dose
-			if($diff >= 8) {
+			if($diff >= 8 || $ignore_time_difference) {
 			
 				//add monitoring data
 				$query = "INSERT INTO `monitoring` (patient_id) VALUES ($pid)";
