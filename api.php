@@ -28,10 +28,10 @@ if(isset($_GET["operation"]) && $_GET["operation"] == "check_time") {
 			$must_order = $_GET["must_order"];
 			$ignore_time_difference = false;
 			$multi_pill_per_med=false;
-			if(!isset($_GET["ignore_time_difference"]) && $_GET["ignore_time_difference"] == "yes") {
+			if(isset($_GET["ignore_time_difference"]) && $_GET["ignore_time_difference"] == "yes") {
 				$ignore_time_difference = true;
 			}
-			if(!isset($_GET["multi_pill_per_med"]) && $_GET["multi_pill_per_med"] == "yes") {
+			if(isset($_GET["multi_pill_per_med"]) && $_GET["multi_pill_per_med"] == "yes") {
 				$multi_pill_per_med = true;
 			}
 			get_dose($pid, $pcode, $must_order, $ignore_time_difference, $multi_pill_per_med);
