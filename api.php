@@ -91,9 +91,9 @@ function validate_user($pid, $pcode) {
 function get_dose($pid, $pcode, $must_order, $ignore_time_difference, $multi_pill_per_med) {
 
 	$patients_tubes = array(
-		array("1,3", "1,3,5"),
-		array("2,3", "2,3,6"),
-		array("", "4")
+		array("1,0,1,0,0,0", "1,0,1,0,1,0"),
+		array("0,1,1,0,0,0", "0,1,1,0,0,1"),
+		array("0,0,0,0,0,0", "0,0,0,1,0,0")
 	);
 	if($multi_pill_per_med) {
 		$patients_tubes = array(
@@ -137,8 +137,8 @@ function get_dose($pid, $pcode, $must_order, $ignore_time_difference, $multi_pil
 		
 			$ordering_error = false;
 			
-			//give dose only if at least 8 hours difference form last dose
-			if($diff >= 8 || $ignore_time_difference) {
+			//give dose only if at least 6 hours difference form last dose
+			if($diff >= 6 || $ignore_time_difference) {
 			
 				//add monitoring data
 				$query = "INSERT INTO `monitoring` (patient_id) VALUES ($pid)";
