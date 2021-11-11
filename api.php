@@ -91,9 +91,9 @@ function validate_user($pid, $pcode) {
 function get_dose($pid, $pcode, $must_order, $ignore_time_difference, $multi_pill_per_med) {
 
 	$patients_tubes = array(
-		array("1,0,1,0,0,0", "1,0,1,0,1,0"),
-		array("0,1,1,0,0,0", "0,1,1,0,0,1"),
-		array("0,0,0,0,0,0", "0,0,0,1,0,0")
+		array("1,0,1,0", "1,0,1,0"),
+		array("0,1,1,0", "0,1,1,0"),
+		array("0,0,0,0", "0,0,0,1")
 	);
 	if($multi_pill_per_med) {
 		$patients_tubes = array(
